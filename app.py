@@ -88,4 +88,4 @@ st.pyplot(fig)
 st.markdown("---")
 
 # 6. Họ tên và MSSV người tạo (Sửa lại họ tên và MSSV của bạn tại đây)
-st.caption("<small>Ứng dụng được tạo bởi: <b>Nguyễn Văn A</b> - MSSV: <b>12345678</b></small>", unsafe_allow_html=True)
+st.caption("<small>Ứng dụng được tạo bởi: <b>Trần Lê Trọng Khánh</b> - MSSV: <b>051207000564</b></small>", unsafe_allow_html=True)
