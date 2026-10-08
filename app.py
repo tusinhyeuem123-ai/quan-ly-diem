@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Quản Lý Điểm Sinh Viên", layout="wide")
 
-# 1. Tiêu đề
+# 1. Hiển thị tiêu đề
 st.title("QUẢN LÝ ĐIỂM SINH VIÊN-")
 
 # Dữ liệu 10 sinh viên
@@ -20,10 +20,9 @@ data = {
 
 df = pd.DataFrame(data)
 
-# Điểm tổng kết = 20% Chuyên cần + 30% Giữa kỳ + 50% Cuối kỳ
+# Tính tổng kết và xếp loại
 df['Tổng kết'] = (0.2 * df['Chuyên cần'] + 0.3 * df['Giữa kỳ'] + 0.5 * df['Cuối kỳ']).round(2)
 
-# Xếp loại
 def xep_loai(diem):
     if diem >= 8.5:
         return 'Giỏi'
@@ -37,30 +36,28 @@ def xep_loai(diem):
 df['Xếp loại'] = df['Tổng kết'].apply(xep_loai)
 
 # 2. Hiển thị bảng điểm của 10 sinh viên
-st.subheader("📋 Bảng điểm sinh viên")
+st.subheader("📋 Bảng điểm của 10 sinh viên")
 st.dataframe(df, use_container_width=True)
 
 st.markdown("---")
 
-# 3. Thống kê
-st.subheader("📊 Thống kê chung của lớp")
-col1, col2, col3, col4 = st.columns(4)
-
+# 3. Hiển thị điểm TB, sinh viên cao nhất, thấp nhất, số SV đạt
+st.subheader("📊 Thống kê của lớp")
 dtb_lop = df['Tổng kết'].mean()
 sv_max = df.loc[df['Tổng kết'].idxmax()]
 sv_min = df.loc[df['Tổng kết'].idxmin()]
 so_sv_dat = (df['Tổng kết'] >= 5.0).sum()
 
-col1.metric("Điểm TB của lớp", f"{dtb_lop:.2f}")
-col2.metric("Điểm cao nhất", f"{sv_max['Tổng kết']}", f"{sv_max['Họ tên']}")
-col3.metric("Điểm thấp nhất", f"{sv_min['Tổng kết']}", f"{sv_min['Họ tên']}")
-col4.metric("Số sinh viên đạt", f"{so_sv_dat}/{len(df)}")
+st.write(f"- **Điểm trung bình của lớp:** {dtb_lop:.2f}")
+st.write(f"- **Sinh viên có điểm tổng kết cao nhất:** {sv_max['Họ tên']} ({sv_max['Tổng kết']} điểm)")
+st.write(f"- **Sinh viên có điểm tổng kết thấp nhất:** {sv_min['Họ tên']} ({sv_min['Tổng kết']} điểm)")
+st.write(f"- **Số sinh viên đạt (điểm tổng kết ≥ 5):** {so_sv_dat} sinh viên")
 
 st.markdown("---")
 
-# 4. Danh sách xổ xuống chọn sinh viên
-st.subheader("🔍 Tra cứu sinh viên")
-selected_sv = st.selectbox("Chọn một sinh viên:", df['Họ tên'])
+# 4. Danh sách xổ xuống (Selectbox) và chi tiết sinh viên
+st.subheader("🔍 Tra cứu chi tiết sinh viên")
+selected_sv = st.selectbox("Chọn sinh viên:", df['Họ tên'])
 
 if selected_sv:
     tt = df[df['Họ tên'] == selected_sv].iloc[0]
@@ -73,8 +70,8 @@ if selected_sv:
 
 st.markdown("---")
 
-# 5. Biểu đồ cột
-st.subheader("📈 Biểu đồ cột điểm tổng kết của 10 sinh viên")
+# 5. Biểu đồ cột điểm tổng kết của 10 sinh viên
+st.subheader("📈 Biểu đồ cột điểm tổng kết")
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.barh(df['Họ tên'], df['Tổng kết'], color='#5b9bd5', height=0.6)
 ax.invert_yaxis()
@@ -87,5 +84,5 @@ st.pyplot(fig)
 
 st.markdown("---")
 
-# 6. Họ tên và MSSV người tạo (Sửa lại họ tên và MSSV của bạn tại đây)
+# 6. Họ tên và MSSV ở cuối trang (chữ nhỏ)
 st.caption("<small>Ứng dụng được tạo bởi: <b>Trần Lê Trọng Khánh</b> - MSSV: <b>051207000564</b></small>", unsafe_allow_html=True)
